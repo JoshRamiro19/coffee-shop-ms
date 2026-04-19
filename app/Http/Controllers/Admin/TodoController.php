@@ -14,7 +14,13 @@ class TodoController extends Controller
         $todos = Todo::with('assignee')
             ->when($request->status, fn($q) => $q->where('status', $request->status))
             ->when($request->priority, fn($q) => $q->where('priority', $request->priority))
-            ->orderByRaw("FIELD(priority, 'urgent', 'high', 'medium', 'low')")
+            //->orderByRaw("FIELD(priority, 'urgent', 'high', 'medium', 'low')") //MySQL function
+            ->orderByRaw("CASE priority
+                WHEN 'urgent' THEN 1
+                WHEN 'high' THEN 2
+                WHEN 'medium' THEN 3
+                WHEN 'low'
+                THEN 4 ELSE 5 END") //SQLite Function
             ->orderBy('due_date')
             ->paginate(20);
 

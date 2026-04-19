@@ -88,9 +88,9 @@
 
 @push('scripts')
 <script>
-const labels = @json($salesData->pluck('date'));
-const totals = @json($salesData->pluck('total').map(fn($v) => (float)$v));
-const orders = @json($salesData->pluck('orders'));
+const labels  = @json($salesData->pluck('date'));
+const totals  = @json($salesData->pluck('total')).map(v => parseFloat(v));
+const orders  = @json($salesData->pluck('orders')).map(v => parseInt(v));
 
 new Chart(document.getElementById('revenueChart'), {
     type: 'line',
